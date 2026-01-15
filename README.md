@@ -1,6 +1,6 @@
 Change Wallpaper
     Usage:
-    'cw [arg1] [optional]'
+    '''cw [arg1] [optional]'''
     VID        = Only search and play videos        : Supported files gif, mp4, mkv, webm
     IMG        = Only search and display images     : Supported files png, jpg, jpeg
     MUTE       = Optional mute video
