@@ -1,4 +1,4 @@
-Change Wallpaper
+Change Wallpaper <br>
     Usage:
     
     cw [arg1] [optional]
