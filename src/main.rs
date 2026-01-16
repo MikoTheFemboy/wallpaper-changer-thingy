@@ -20,9 +20,12 @@ fn invalid_arg(){
     MUTE    = OPTIONAL mute video
 
     Keybinds:
-    M       =   Toggle mute
-    K       =   Kill mpvpaper
     Q/ESC   =   Quit
+    K       =   Kill mpvpaper
+    R       =   Refresh
+    M       =   Toggle mute
+    f/b     =   Seek forward 5 seconds (or whatever you changed it to)
+    F/B     =   Seek forward 1 seconds (or whatever you changed it to)
     S       =   Start swww daemon
     UP/DOWN =   Seek available
     ENTER   =   Select as wallpaper
@@ -32,6 +35,9 @@ Made by Miko みこ <3";
     println!("{}", HELP);
     exit(1);
 }
+
+static SEEK_VALUE:u32 = 5; // Change these
+static SEEK_VALUE_PRECISE:u32 = 1; // Two if you want idc
 
 fn main() -> Result<(), Box<dyn std::error::Error>> {
     let args: Vec<String> = env::args().collect();
@@ -144,6 +150,11 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
                     }
                 }
                 KeyCode::Char('m') => {let _ = rashf!("echo 'cycle mute' | socat - /tmp/mpv-socket");},
+                KeyCode::Char('f') => {let _ = rashf!("echo 'seek {} relative' | socat - /tmp/mpv-socket", SEEK_VALUE);},
+                KeyCode::Char('b') => {let _ = rashf!("echo 'seek -{} relative' | socat - /tmp/mpv-socket", SEEK_VALUE);},
+                KeyCode::Char('F') => {let _ = rashf!("echo 'seek {} relative' | socat - /tmp/mpv-socket", SEEK_VALUE_PRECISE);},
+                KeyCode::Char('B') => {let _ = rashf!("echo 'seek -{} relative' | socat - /tmp/mpv-socket", SEEK_VALUE_PRECISE);},
+                KeyCode::Char('p') => {let _ = rashf!("echo 'cycle pause' | socat - /tmp/mpv-socket");}
                 KeyCode::Char('k') => {let _ = rashf!("pkill mpvpaper");},
                 KeyCode::Char('q') | KeyCode::Esc => break,
                 _ => {}
