@@ -5,7 +5,7 @@ use crossterm::{
     cursor,
 };
 use rsbash::rashf;
-use std::{fs, os::unix::process::CommandExt, path::Path, process::{Command, Stdio, exit}};
+use std::{fs, os::unix::process::CommandExt, process::{Command, Stdio, exit}};
 use std::io::{stdout};
 use std::path::PathBuf;
 use dirs;
@@ -144,7 +144,7 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
                     }
                 }
                 KeyCode::Char('m') => {let _ = rashf!("echo 'cycle mute' | socat - /tmp/mpv-socket");},
-                KeyCode::Char('k') => {let _ = rashf!("pkill mpvpaper"); println!("mpvpaper killed")},
+                KeyCode::Char('k') => {let _ = rashf!("pkill mpvpaper");},
                 KeyCode::Char('q') | KeyCode::Esc => break,
                 _ => {}
             }
