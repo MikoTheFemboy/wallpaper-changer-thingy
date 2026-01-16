@@ -5,7 +5,7 @@ use crossterm::{
     cursor,
 };
 use rsbash::rashf;
-use std::{fs, os::unix::process::CommandExt, process::{Command, Stdio, exit}};
+use std::{fs, os::unix::process::CommandExt, path::Path, process::{Command, Stdio, exit}};
 use std::io::{stdout};
 use std::path::PathBuf;
 use dirs;
@@ -70,21 +70,24 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
 
     let wallpaper_dir = dirs::home_dir().unwrap().join("Pictures/wallpapers");
     
-    let files: Vec<PathBuf> = fs::read_dir(&wallpaper_dir)?.filter_map(|entry|entry.ok().map(|e| e.path()))
-    .filter(|path|{
-        let ext = path.extension().and_then(|s|s.to_str()).unwrap_or("");
-        if video{
-            matches!(ext, "gif" | "mp4" | "mkv" | "webm")
-        }
-        else{
-            matches!(ext, "png" | "jpg" | "jpeg")
-        }
-    }).collect();
+    let scan_files = || -> Vec<PathBuf> {
+        fs::read_dir(&wallpaper_dir)
+            .map(|rd| {
+                rd.filter_map(|entry| entry.ok().map(|e| e.path()))
+                    .filter(|path| {
+                        let ext = path.extension().and_then(|s| s.to_str()).unwrap_or("").to_lowercase();
+                        if video {
+                            matches!(ext.as_str(), "gif" | "mp4" | "mkv" | "webm")
+                        } else {
+                            matches!(ext.as_str(), "png" | "jpg" | "jpeg")
+                        }
+                    })
+                    .collect()
+            })
+            .unwrap_or_else(|_| Vec::new())
+    };
 
-    if files.is_empty(){
-        println!("No wallpapers found in {:?}", wallpaper_dir);
-        return Ok(())
-    }
+    let mut files = scan_files();
 
     enable_raw_mode()?;
     let mut stdout = stdout();
@@ -93,7 +96,14 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
     loop {
         execute!(stdout, Clear(ClearType::All), cursor::MoveTo(0, 0))?;
         println!("Miko's swww & mpvpaper wallpaper changer <3\r\n");
-        println!("Wallpaper directory at: {:?}\r\n", wallpaper_dir);
+
+        if files.is_empty(){
+        println!("No wallpapers found in {:?} \r\n", wallpaper_dir);
+        println!("Press R to refresh\r\n");
+        }
+        else{
+            println!("Wallpaper directory at: {:?}\r\n", wallpaper_dir);
+        }
 
         for(i, path) in files.iter().enumerate(){
             let name = path.file_name().unwrap().to_string_lossy();
@@ -108,6 +118,7 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
         if let Event::Key(key_event) = event::read()?{
             match key_event.code{
                 KeyCode::Char('s') => {let _ = Command::new("swww-daemon").process_group(0).stdin(Stdio::null()).stdout(Stdio::null()).stderr(Stdio::null()).spawn();},
+                KeyCode::Char('r') => {files = scan_files(); crt_idx = 0;},
                 KeyCode::Up => {
                     if crt_idx > 0 {crt_idx -= 1;}
                 },
@@ -118,9 +129,11 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
                     let selected = files[crt_idx].to_str().unwrap();
                     if !video && fit == true{
                         let _ = rashf!("swww img '{}' --resize fit", selected);
+                        println!("{} Selected", selected);
                     }
                     else if !video{
                         let _ = rashf!("swww img '{}'", selected);
+                        println!("{} Selected", selected);
                     }
                     else {
                         let _ = rashf!("pkill mpvpaper");
@@ -133,7 +146,7 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
                     }
                 }
                 KeyCode::Char('m') => {let _ = rashf!("echo 'cycle mute' | socat - /tmp/mpv-socket");},
-                KeyCode::Char('k') => {let _ = rashf!("pkill mpvpaper");},
+                KeyCode::Char('k') => {let _ = rashf!("pkill mpvpaper"); println!("mpvpaper killed")},
                 KeyCode::Char('q') | KeyCode::Esc => break,
                 _ => {}
             }
