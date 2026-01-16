@@ -129,11 +129,9 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
                     let selected = files[crt_idx].to_str().unwrap();
                     if !video && fit == true{
                         let _ = rashf!("swww img '{}' --resize fit", selected);
-                        println!("{} Selected", selected);
                     }
                     else if !video{
                         let _ = rashf!("swww img '{}'", selected);
-                        println!("{} Selected", selected);
                     }
                     else {
                         let _ = rashf!("pkill mpvpaper");
