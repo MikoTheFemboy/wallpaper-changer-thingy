@@ -1,6 +1,6 @@
 use std::{io::{self, BufWriter ,Write, stdout}, path::PathBuf, os::unix::{net::UnixStream}};
-use crossterm::{cursor, execute, terminal::{Clear, ClearType, window_size}};
-use serde_json::{json, value};
+use crossterm::{cursor, execute, terminal::{Clear, ClearType}};
+use serde_json::{json};
 
 // Draw logic
 pub fn draw(files: &[PathBuf], crt_idx:usize) -> io::Result<()>{

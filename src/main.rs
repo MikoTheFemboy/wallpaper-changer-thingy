@@ -1,9 +1,8 @@
-use std::{env::{self, args}, fs, os::unix::process::CommandExt, process::{Command, Stdio, exit}, path::PathBuf};
+use std::{env::{self}, fs, os::unix::process::CommandExt, process::{Command, Stdio, exit}, path::PathBuf};
 use dirs;
-use libc::name_t;
 use users::get_effective_uid;
-use rsbash::{rash, rashf};
-use crossterm::{event::{self, Event, KeyCode, KeyEvent, KeyModifiers}, terminal::{disable_raw_mode, enable_raw_mode}};
+use rsbash::{rashf};
+use crossterm::{event::{self, Event, KeyCode, KeyModifiers}, terminal::{disable_raw_mode, enable_raw_mode}};
 
 mod helper;
 

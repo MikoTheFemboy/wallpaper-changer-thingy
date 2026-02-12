@@ -1,16 +1,12 @@
 [package]
 name = "cw"
-version = "0.1.0"
+version = "0.1.1"
 edition = "2024"
 
 [dependencies]
 rsbash = "*"
 crossterm = "*"
-<<<<<<< HEAD
 dirs = "*"
 serde_json = "1.0"
 libc = "0.2"
 users = "0.11"
-=======
-dirs = "*"
->>>>>>> 2c3fef901187d3b80d65311f6434d0bc740ad81c
