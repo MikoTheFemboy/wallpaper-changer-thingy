@@ -160,7 +160,7 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
 
                 KeyCode::Char('c') => {
                     if key_event.modifiers.contains(KeyModifiers::CONTROL){
-                        println!("Keyboard Interrupt received");
+                        println!("Keyboard Interrupt received\r\n");
                         break;
                     }
                 },
@@ -187,13 +187,6 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
                         let _ = rashf!("swww img '{}'", selected);
                     }
                     else {
-                        if !video && fit == true{
-                        let _ = rashf!("swww img '{}' --resize fit", selected);
-                    }
-                    else if !video{
-                        let _ = rashf!("swww img '{}'", selected);
-                    }
-                    else {
                         let _ = rashf!("pkill mpvpaper");
 
                         let mut child = Command::new("mpvpaper");
@@ -217,8 +210,6 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
 
                         let _ = child.spawn();
                     }
-                }
-
                 }
             },
                 _ => {}
