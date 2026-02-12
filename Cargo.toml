@@ -1,0 +1,12 @@
+[package]
+name = "cw"
+version = "0.1.0"
+edition = "2024"
+
+[dependencies]
+rsbash = "*"
+crossterm = "*"
+dirs = "*"
+serde_json = "1.0"
+libc = "0.2"
+users = "0.11"
