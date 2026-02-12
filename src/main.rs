@@ -146,13 +146,11 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
                 KeyCode::Char('m') => {let _ = helper::send_command(MPV_SOCKET_PATH, vec!["cycle", "mute"]);},
                 KeyCode::Char('f') => {let _ = helper::send_command(MPV_SOCKET_PATH, vec!["seek", &SEEK_VALUE.to_string(), "relative"]);},
                 KeyCode::Char('b') => {
-                    let seek = format!("--{}", SEEK_VALUE);
-                    let _ = helper::send_command(MPV_SOCKET_PATH, vec!["seek", &seek, "relative"]);
+                    let _ = helper::send_command(MPV_SOCKET_PATH, vec!["seek", &format!("-{SEEK_VALUE}"), "relative"]);
                 },
                 KeyCode::Char('F') => {let _ = helper::send_command(MPV_SOCKET_PATH, vec!["seek", &SEEK_VALUE_PRECISE.to_string(), "relative"]);},
                 KeyCode::Char('B') => {
-                    let seek = format!("--{}", SEEK_VALUE_PRECISE);
-                    let _ = helper::send_command(MPV_SOCKET_PATH, vec!["seek", &seek, "relative"]);
+                    let _ = helper::send_command(MPV_SOCKET_PATH, vec!["seek", &format!("-{SEEK_VALUE_PRECISE}"), "relative"]);
                 },
                 KeyCode::Char('p') => {let _ = helper::send_command(MPV_SOCKET_PATH, vec!["cycle", "pause"]);}
                 KeyCode::Char('k') => {let _ = rashf!("pkill mpvpaper");},
